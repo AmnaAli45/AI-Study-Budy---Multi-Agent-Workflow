@@ -12,7 +12,8 @@ from tavily import TavilyClient
 import os
 import urllib.parse
 from langgraph.checkpoint.memory import MemorySaver
-from langgraph.graph import START, END, State
+from langgraph.graph import START, END, StateGraph
+from state import State
 
 
 load_dotenv()
