@@ -8,7 +8,7 @@ load_dotenv()
 
 st.set_page_config(page_title="AI Study Buddy", page_icon="📚")
 st.title("AI Study Buddy")
-st.caption("Koi bhi topic seekho — explanation aur quiz ke saath!")
+st.caption("Learn any topic — with explanation and a quiz!")
 
 # ── Session state initialize ──────────────────────────────────
 if "phase" not in st.session_state:
@@ -150,7 +150,7 @@ elif st.session_state.phase == "done":
     col1, col2 = st.columns(2)
 
     with col1:
-        if st.button("Naya topic seekho"):
+        if st.button("Learn New Topic"):
             import time
             st.session_state.phase = "input"
             st.session_state.thread_id = f"session-{int(time.time())}"
@@ -158,6 +158,6 @@ elif st.session_state.phase == "done":
             st.rerun()
 
     with col2:
-        if st.button("Notes dobara dekho"):
+        if st.button("Review Notes Again"):
             st.session_state.phase = "explain"
             st.rerun()
