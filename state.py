@@ -1,7 +1,9 @@
-from typing import TypedDict,List,Literal
+from typing import TypedDict,Annotated,List
+from operator import add 
 
 class State(TypedDict):
     user_msg: str
+    messages:Annotated[list, add]
     topic:str
     needs_classification: bool
     knowledge_level : str
