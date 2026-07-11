@@ -74,7 +74,7 @@ def clarify_with_human(state: State):
     )
     # return {
     #    # "knowledge_level": decision 
-    #    "knowledge_level": "advanced"  # 👈 user ka answer yahan store hoga
+    #    "knowledge_level": "advanced"  #  user ka answer yahan store hoga
     # }
     return {"user_msg": decision, "needs_classification": False}
 
@@ -142,7 +142,7 @@ def wikepedia_search_node(topic: str) -> dict:
 
 # 2- Tavily Search
 tavily_client = TavilyClient(api_key=os.environ["TAVILY_API_KEY"])
-@tool
+
 def tavily_search_tool(topic,depth)->dict:
     
     
@@ -404,11 +404,20 @@ Student's answer: {user_answer}''')
         "last_feedback": result.feedback,
     }
 
+#  --------------------------------------------- Entry Router ---------------------------------------
+# --------------------------------------- Entry Router ----------------------------------------------
+def entry_router(state: State) -> Literal['Understand_topic', 'answer_checker']:
+    # If a quiz already exists and the user just sent a new message,
+    # treat this as an answer submission, not a fresh topic request.
+    if state.get('quiz') and state.get('messages'):
+        return 'answer_checker'
+    return 'Understand_topic'
 
 #  --------------------------------------------- Creating  Graph ---------------------------------------------
 graph = StateGraph(State)
 
 ## Adding Nodes
+
 graph.add_node('Understand_topic',understandtopic_node)
 graph.add_node('clarify_with_human',clarify_with_human)
 graph.add_node('search_agent',search_agent)
@@ -417,7 +426,8 @@ graph.add_node('quiz_generator',quiz_generator)
 graph.add_node('answer_checker', answer_checker)
 
 ## Add Edges
-graph.add_edge(START,'Understand_topic')
+graph.add_conditional_edges(START, entry_router)
+# graph.add_edge(START,'Understand_topic')
 graph.add_conditional_edges('Understand_topic',router)
 graph.add_edge('clarify_with_human','search_agent')
 graph.add_edge('search_agent','synthesize')

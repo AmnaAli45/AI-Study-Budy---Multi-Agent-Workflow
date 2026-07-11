@@ -113,7 +113,7 @@ elif st.session_state.phase == "quiz":
     if st.button("Submit") and answer:
         selected_letter = answer.split(":")[0].strip()
 
-        with st.spinner("Check kar raha hoon..."):
+        with st.spinner("Checking..."):
             result = workflow.invoke(
                 {"messages": [HumanMessage(content=selected_letter)]},
                 config
